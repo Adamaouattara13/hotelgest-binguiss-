@@ -1,8 +1,7 @@
 # Cahier des charges : Système de gestion de l'Hôtel Restaurant Le Binguiss
 
-Projet d'atelier de génie logiciel · Version 2 (document unifié) · 15 octobre 2026
+Projet d'atelier de génie logiciel 15 octobre 2026
 
-> Ce document fusionne le cahier des charges validé par le client (version 1 du 14 octobre 2026) et le document de cadrage fonctionnel initial. Les questions encore sans réponse figurent dans un document séparé (« Questions en attente »).
 
 | Élément | Information |
 |---|---|
@@ -36,7 +35,6 @@ Projet d'atelier de génie logiciel · Version 2 (document unifié) · 15 octobr
 | **Type** | Restaurant classique en bord de mer avec service hôtelier intégré |
 | **Activités** | Restauration et hébergement hôtelier, regroupés dans un même établissement |
 | **Caisse** | Un seul poste de caisse, avec deux sources d'entrée d'argent : le restaurant et l'hôtel |
-| **Site internet** | Existant, à adapter |
 
 ### 1.2 Activités et services proposés
 
@@ -69,7 +67,7 @@ Les clients passent par le site internet de l'établissement pour consulter le m
 
 ### 2.1 Contexte
 
-Dans le cadre de l'atelier de génie logiciel, ce projet consiste à concevoir un système de gestion pour l'Hôtel Restaurant Le Binguiss, à partir des besoins exprimés par l'établissement. Les termes « application », « logiciel » et « système » désignent ici le même programme.
+Dans le cadre de l'atelier de génie logiciel, ce projet consiste à concevoir un système de gestion pour l'Hôtel Restaurant Le Binguiss, à partir des besoins exprimés par l'établissement.
 
 ### 2.2 Nature du projet
 
