@@ -60,8 +60,6 @@ L'application s'appuie sur une base de données relationnelle qui centralise les
 - Une caisse principale unique, avec un tableau de bord sécurisé.
 - Une interface publique (site internet existant, à adapter) pour que les clients consultent les informations et fassent certaines demandes, sans accès à l'espace interne.
 
+Maquette Figma
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 72c0c299e1653dd693ce267d40fdac1bb30150e7
+ https://www.figma.com/design/DtyYS1ANsIX7s0vLtSeJCw/Le-Binguiss---Maquette?node-id=73-44&t=a6IUP1xznhlPw87L-1
