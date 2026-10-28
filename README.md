@@ -61,3 +61,7 @@ L'application s'appuie sur une base de données relationnelle qui centralise les
 - Une interface publique (site internet existant, à adapter) pour que les clients consultent les informations et fassent certaines demandes, sans accès à l'espace interne.
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 72c0c299e1653dd693ce267d40fdac1bb30150e7
