@@ -1,0 +1,51 @@
+================================================================================
+                    ORGANISATION DU PROJET — LE BINGUISS
+================================================================================
+
+Votre dossier principal est maintenant 100% propre, clair et sans encombrement :
+
+--------------------------------------------------------------------------------
+1. 📁 client/ — LE SITE CLIENT (Ce que voient les clients)
+--------------------------------------------------------------------------------
+- index.html  : Page d'accueil, carte du restaurant, chambres d'hôtel, réservation.
+- menu.html   : Raccourci vers le menu.
+- panier.html : Raccourci vers le panier.
+- Toutes les images officielles (photos des plats, chambres, logo, icônes).
+
+-> Une copie identique et autonome prête à envoyer au client est sur votre Bureau :
+   "C:\Users\MSI\Desktop\Site Web Client - Le Binguiss"
+
+
+--------------------------------------------------------------------------------
+2. 📁 caisse/ — L'ESPACE CAISSE & GÉRANT (Personnel)
+--------------------------------------------------------------------------------
+- caisse.html :
+  * Écran 1 : Plan des tables en direct (vert = payée, rouge = non payée).
+  * Écran 2 : Prise de commande par table et panier caissier.
+  * Écran 3 : Suivi des commandes en cuisine.
+  * Écran 4 : Planning hebdomadaire des chambres (Check-in / Check-out).
+  * Écran 5 : Gestion du stock en temps réel (seuil minimum, alertes).
+  * Écran 6 : Espace Gérant (statistiques, graphiques, export PDF & Excel).
+
+
+--------------------------------------------------------------------------------
+3. 📁 backend/ — LE SERVEUR & BASE DE DONNÉES (Le cerveau)
+--------------------------------------------------------------------------------
+- app.py      : Programme Flask qui gère les données et répond aux deux sites.
+- binguiss.db : Base de données SQLite avec les 62 plats, prix et commandes.
+
+
+--------------------------------------------------------------------------------
+4. 📁 _ARCHIVES_ET_DOUBLONS/ — TOUT LE SURPLUS EN LIEU SÛR
+--------------------------------------------------------------------------------
+Tous les anciens fichiers, doublons, dossiers imbriqués et sauvegardes
+ont été déplacés ici pour ne pas encombrer votre vue, tout en restant conservés.
+
+
+--------------------------------------------------------------------------------
+POUR DÉMARRER EN 1 CLIC :
+--------------------------------------------------------------------------------
+Double-cliquez sur : LANCER_LE_SERVEUR.bat
+- Site client : http://127.0.0.1:5000/
+- Caisse      : http://127.0.0.1:5000/caisse
+================================================================================

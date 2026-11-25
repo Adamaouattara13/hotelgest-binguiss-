@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Le Binguiss — Hôtel & Restaurant | Grand-Bassam</title>
+    <meta name="description" content="Hôtel et Restaurant Le Binguiss à Grand-Bassam. Un repas, une chambre, face à la mer. Commandez vos plats et réservez votre séjour.">
+
+    <!-- Typographie moderne identique à la maquette -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+
+    <div class="app-viewport">
+
+        <!-- HEADER APPLICATION -->
+        <header class="app-header">
+            <div class="header-inner">
+                <a class="logo-area" onclick="naviguerVers('accueil')">
+                    <img loading="lazy" src="images/logo.png" alt="Le Binguiss" class="logo-img" onerror="this.style.display='none'">
+                    <span class="brand-title">Le Binguiss</span>
+                </a>
+
+                <!-- Navigation format ordinateur/tablette -->
+                <nav class="desktop-nav">
+                    <a href="#accueil" class="nav-link active" data-view="accueil" onclick="naviguerVers('accueil')">Accueil</a>
+                    <a href="#menu" class="nav-link" data-view="menu" onclick="naviguerVers('menu')">Notre menu</a>
+                    <a href="#reserver" class="nav-link" data-view="reserver" onclick="naviguerVers('reserver')">Réserver</a>
+                    <a href="#commande" class="nav-link" data-view="commande" onclick="naviguerVers('commande')">Votre commande</a>
+                </nav>
+
+                <div class="header-actions">
+                    <button class="header-cart-btn" onclick="naviguerVers('commande')">
+                        <span>🛒 Panier</span>
+                        <span class="header-cart-badge" id="headerCartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ══════════════════════════════════════════════════════════
+             ÉCRAN 1 : SITE CLIENT (MOBILE & DESKTOP ACCUEIL)
+             ══════════════════════════════════════════════════════════ -->
+        <main class="view-section active" id="view-accueil">
+            <!-- Carte Dégradé Hero (Conforme à l'écran 7 de la maquette) -->
+            <div class="hero-banner-card">
+                <h1 class="hero-headline">Un repas, une chambre, face à la mer</h1>
+                <div class="hero-actions">
+                    <button class="btn-reserve-hero" onclick="naviguerVers('reserver')">Réserver</button>
+                    <button class="btn-order-hero" onclick="naviguerVers('menu')">Commander</button>
+                </div>
+            </div>
+
+            <!-- Cartes raccourcis d'accueil (Conforme à l'écran 7 de la maquette) -->
+            <div class="home-cards-grid">
+                <div class="home-feature-card" onclick="naviguerVers('menu')">
+                    <div class="feature-card-info">
+                        <h4>Menu du jour</h4>
+                        <p>Poisson braisé (Capitaine/Bar) · 8 000 F</p>
+                    </div>
+                    <div class="feature-card-arrow">→</div>
+                </div>
+
+                <div class="home-feature-card" onclick="naviguerVers('reserver')">
+                    <div class="feature-card-info">
+                        <h4>Chambre vue mer</h4>
+                        <p>Dès 35 000 F la nuit</p>
+                    </div>
+                    <div class="feature-card-arrow">→</div>
+                </div>
+            </div>
+
+            <!-- Galerie Photos Réelles du Client (Plage, Espace & Chambres) -->
+            <div style="margin-top: 24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h3 style="font-size:16px; font-weight:800; color:var(--navy);">Le cadre en images</h3>
+                    <span style="font-size:12px; color:var(--gold-hover); font-weight:700;">Grand-Bassam · Face à la mer</span>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
+                    <div style="border-radius:14px; overflow:hidden; height:105px; box-shadow:var(--shadow-sm); border:1px solid var(--border-color);" title="Terrasse Restaurant">
+                        <img loading="lazy" src="images/place.png" alt="Terrasse Le Binguiss" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="border-radius:14px; overflow:hidden; height:105px; box-shadow:var(--shadow-sm); border:1px solid var(--border-color);" title="Plage">
+                        <img loading="lazy" src="images/plages.png" alt="Plage face à la mer" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="border-radius:14px; overflow:hidden; height:105px; box-shadow:var(--shadow-sm); border:1px solid var(--border-color);" title="Chambre vue mer">
+                        <img loading="lazy" src="images/chambre.png" alt="Chambre hôtel" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="border-radius:14px; overflow:hidden; height:105px; box-shadow:var(--shadow-sm); border:1px solid var(--border-color);" title="Suite 101">
+                        <img loading="lazy" src="images/101img.png" alt="Suite mer N° 101" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="border-radius:14px; overflow:hidden; height:105px; box-shadow:var(--shadow-sm); border:1px solid var(--border-color);" title="Paillotes bord de mer">
+                        <img loading="lazy" src="images/place4.png" alt="Paillote de plage" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="border-radius:14px; overflow:hidden; height:105px; box-shadow:var(--shadow-sm); border:1px solid var(--border-color);" title="Plage et cocotiers">
+                        <img loading="lazy" src="images/plage2.png" alt="Plage et cocotiers" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pied de page & Accès Personnel / Caisse -->
+            <div style="margin-top: 36px; padding: 24px 0 10px; border-top: 1px solid var(--border-color); text-align: center;">
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">© Hôtel & Restaurant Le Binguiss — Grand-Bassam</p>
+            </div>
+        </main>
+
+        <!-- ══════════════════════════════════════════════════════════
+             ÉCRAN 2 : NOTRE MENU (Conforme à l'écran 8 de la maquette)
+             ══════════════════════════════════════════════════════════ -->
+        <section class="view-section" id="view-menu">
+            <h2 class="page-title">Notre menu</h2>
+
+            <!-- Filtres Catégories (Pilules de la maquette avec toutes les catégories réelles) -->
+            <div class="menu-filter-pills">
+                <button class="filter-pill active" onclick="filtrerMenu('plats', this)">Plats</button>
+                <button class="filter-pill" onclick="filtrerMenu('entrees', this)">Entrées</button>
+                <button class="filter-pill" onclick="filtrerMenu('accompagnements', this)">Accompagnements</button>
+                <button class="filter-pill" onclick="filtrerMenu('boissons', this)">Boissons</button>
+                <button class="filter-pill" onclick="filtrerMenu('desserts', this)">Desserts</button>
+                <button class="filter-pill" onclick="filtrerMenu('chambres', this)">Chambres</button>
+            </div>
+
+            <!-- Grille des articles du menu -->
+            <div class="menu-items-grid" id="menuItemsContainer">
+                <!-- Généré dynamiquement en Javascript -->
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+             ÉCRAN 3 : RÉSERVER (Conforme à l'écran 9 de la maquette)
+             ══════════════════════════════════════════════════════════ -->
+        <section class="view-section" id="view-reserver">
+            <h2 class="page-title">Réserver</h2>
+
+            <!-- Sélecteur Chambre / Table -->
+            <div class="segmented-control">
+                <button class="segment-btn active" id="btnTabChambre" onclick="toggleReservationType('chambre')">Chambre</button>
+                <button class="segment-btn" id="btnTabTable" onclick="toggleReservationType('table')">Table</button>
+            </div>
+
+            <div class="booking-layout-pc">
+                <!-- Formulaire séjour / date -->
+                <div class="booking-form-card">
+                    <div id="bookingChambreFields">
+                        <div class="form-group">
+                            <label class="form-label" for="dateArrivee">Arrivée</label>
+                            <input type="text" id="dateArrivee" class="form-input" value="Dim 18 octobre" onchange="calculerSejour()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="dateDepart">Départ</label>
+                            <input type="text" id="dateDepart" class="form-input" value="Mar 20 octobre" onchange="calculerSejour()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="nbPersonnes">Personnes</label>
+                            <select id="nbPersonnes" class="form-input">
+                                <option value="1">1 adulte</option>
+                                <option value="2" selected>2 adultes</option>
+                                <option value="3">3 adultes / famille</option>
+                                <option value="4">4 personnes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="bookingTableFields" style="display:none;">
+                        <div class="form-group">
+                            <label class="form-label" for="dateTable">Date du repas</label>
+                            <input type="date" id="dateTable" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="heureTable">Heure</label>
+                            <select id="heureTable" class="form-input">
+                                <option>12:30 (Déjeuner)</option>
+                                <option>13:30</option>
+                                <option selected>19:30 (Dîner)</option>
+                                <option>20:30</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="couverts">Nombre de couverts</label>
+                            <input type="number" id="couverts" class="form-input" value="2" min="1" max="20">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Liste des chambres disponibles -->
+                <div>
+                    <h3 class="section-subtitle" id="labelDispoTitle">Chambres disponibles</h3>
+                    <div class="rooms-list" id="roomsContainer">
+                        <div class="room-card selected" onclick="selectionnerChambre('Chambre vue mer', 35000, this)">
+                            <div class="room-visual">
+                                <img loading="lazy" src="images/chambre.png" alt="Chambre vue mer" onerror="this.src='images/couloir des chambres.png'">
+                            </div>
+                            <div class="room-info">
+                                <h4 class="room-name">Chambre vue mer</h4>
+                                <div class="room-price">35 000 F / nuit</div>
+                                <span class="badge-status">Libre</span>
+                            </div>
+                        </div>
+
+                        <div class="room-card" onclick="selectionnerChambre('Suite mer prestige (N° 101)', 60000, this)">
+                            <div class="room-visual">
+                                <img loading="lazy" src="images/101img.png" alt="Suite mer N° 101" onerror="this.src='images/chambre.png'">
+                            </div>
+                            <div class="room-info">
+                                <h4 class="room-name">Suite mer prestige (N° 101)</h4>
+                                <div class="room-price">60 000 F / nuit</div>
+                                <span class="badge-status">Libre</span>
+                            </div>
+                        </div>
+
+                        <div class="room-card" onclick="selectionnerChambre('Chambre standard confort', 25000, this)">
+                            <div class="room-visual">
+                                <img loading="lazy" src="images/couloir des chambres.png" alt="Chambre standard" onerror="this.src='images/101.png'">
+                            </div>
+                            <div class="room-info">
+                                <h4 class="room-name">Chambre standard confort</h4>
+                                <div class="room-price">25 000 F / nuit</div>
+                                <span class="badge-status">Libre</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Récapitulatif et bouton réserver -->
+                    <div class="booking-summary-bar">
+                        <div class="summary-nights-label" id="summaryNightsText">2 nuits</div>
+                        <div class="summary-total-price" id="summaryBookingTotal">70 000 F</div>
+                        <button class="btn-submit-booking" onclick="confirmerReservation()">Réserver cette chambre</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+             ÉCRAN 4 : VOTRE COMMANDE (Conforme à l'écran 10 de la maquette)
+             ══════════════════════════════════════════════════════════ -->
+        <section class="view-section" id="view-commande">
+            <h2 class="page-title">Votre commande</h2>
+
+            <!-- Sélecteur À emporter / Livraison -->
+            <div class="segmented-control">
+                <button class="segment-btn" id="btnTabEmporter" onclick="toggleModeCommande('emporter')">À emporter</button>
+                <button class="segment-btn active" id="btnTabLivraison" onclick="toggleModeCommande('livraison')">Livraison</button>
+            </div>
+
+            <div class="order-layout-pc">
+                <!-- Récapitulatif des articles -->
+                <div class="order-summary-box">
+                    <div id="orderItemsSummaryList">
+                        <!-- Rempli en JS -->
+                    </div>
+
+                    <div class="order-total-row">
+                        <span class="order-total-label">Total</span>
+                        <span class="order-total-amount" id="orderCartTotalAmount">0 F</span>
+                    </div>
+                </div>
+
+                <!-- Formulaire client -->
+                <div class="customer-form-card">
+                    <div class="form-group">
+                        <label class="form-label" for="clientNom">Nom</label>
+                        <input type="text" id="clientNom" class="form-input" placeholder="Ex: Koné Awa" value="Koné Awa">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="clientTel">Téléphone</label>
+                        <input type="tel" id="clientTel" class="form-input" placeholder="07 00 00 00 00" value="07 00 00 00 00">
+                    </div>
+                    <div class="form-group" id="groupAdresse">
+                        <label class="form-label" for="clientAdresse">Adresse de livraison</label>
+                        <input type="text" id="clientAdresse" class="form-input" placeholder="Quartier France, Grand-Bassam" value="Quartier France, Grand-Bassam">
+                    </div>
+
+                    <button class="btn-submit-order" onclick="envoyerCommande()">Envoyer la commande</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════════════════════
+             ÉCRAN 5 : COMMANDE ENVOYÉE (Conforme à l'écran 11 de la maquette)
+             ══════════════════════════════════════════════════════════ -->
+        <section class="view-section" id="view-confirmation">
+            <div class="confirmation-view">
+                <div class="success-icon-wrap">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+
+                <h2 class="confirmation-title">Commande envoyée</h2>
+                <p class="confirmation-message">
+                    La caisse du Binguiss a reçu votre commande. Nous vous appelons pour confirmer.
+                </p>
+
+                <!-- Carte récapitulative -->
+                <div class="receipt-card">
+                    <div class="receipt-number" id="confirmOrderNumber">Commande n° 128</div>
+                    <div class="receipt-sub" id="confirmOrderDetails">Livraison · 11 000 F</div>
+                    <span class="badge-unpaid">Non payée</span>
+                </div>
+
+                <button class="btn-back-home" onclick="naviguerVers('accueil')">Retour à l'accueil</button>
+
+                <!-- Bouton d'envoi WhatsApp officiel en 1 clic -->
+                <a href="#" id="linkWhatsAppDirect" target="_blank" class="btn-whatsapp-confirm">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                    Confirmer aussi par WhatsApp
+                </a>
+            </div>
+        </section>
+
+        <!-- ── BARRE FLOTTANTE PANIER (ÉCRAN 8 DE LA MAQUETTE) ── -->
+        <div class="floating-cart-bar" id="floatingCartBar" onclick="naviguerVers('commande')">
+            <div class="cart-bar-left">
+                <span>🛒</span>
+                <span id="floatingCartText">Voir le panier · 2 articles</span>
+            </div>
+            <div class="cart-bar-right" id="floatingCartTotal">11 000 F</div>
+        </div>
+
+        <!-- ── NAVIGATION DU BAS (SMARTPHONE) ── -->
+        <nav class="bottom-nav">
+            <button class="bottom-nav-item active" data-view="accueil" onclick="naviguerVers('accueil')">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Accueil</span>
+            </button>
+            <button class="bottom-nav-item" data-view="menu" onclick="naviguerVers('menu')">
+                <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                <span>Menu</span>
+            </button>
+            <button class="bottom-nav-item" data-view="reserver" onclick="naviguerVers('reserver')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Réserver</span>
+            </button>
+            <button class="bottom-nav-item" data-view="commande" onclick="naviguerVers('commande')">
+                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>Panier</span>
+                <span class="bottom-nav-badge" id="bottomNavBadge" style="display:none;">0</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div class="toast-notify" id="toastNotify">
+        <span>✓</span>
+        <span id="toastMessage">Article ajouté au panier</span>
+    </div>
+
+    <script src="js/script.js" defer></script>
+</body>
+</html>

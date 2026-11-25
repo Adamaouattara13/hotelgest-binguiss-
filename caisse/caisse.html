@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Caisse & Restaurant — Le Binguiss</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/caisse.css">
+
+    <style id="correctifs-connexion">
+        #loginScreen.active { position: fixed; inset: 0; z-index: 9000; overflow-y: auto; display: flex; background: #ffffff; }
+        #loginScreen .hero-pane, #loginScreen .hero-orb { pointer-events: none; }
+        #loginScreen .form-pane { position: relative; z-index: 2; overflow-y: auto; }
+        #loginScreen button, #loginScreen input, #loginScreen label { pointer-events: auto; }
+        #loginScreen .input-field { color: #111827 !important; background: #ffffff !important; border: 1px solid #cbd5e1 !important; opacity: 1 !important; }
+        #loginScreen .input-field[readonly] { background: #f1f5f9 !important; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ECRAN DE CONNEXION -->
+    <div class="login-wrapper active" id="loginScreen">
+        <div class="hero-pane">
+            <div class="hero-orb"></div>
+            <div class="hero-brand">
+                <div class="hero-brand-name">Le Binguiss</div>
+                <span class="hero-brand-badge">Gestion & Caisse</span>
+            </div>
+        </div>
+        <div class="form-pane">
+            <div class="form-container">
+                <h2 class="form-title">Connexion</h2>
+                <p class="form-instruction">Choisissez votre accès, puis entrez votre mot de passe.</p>
+
+                <div class="access-toggle-box">
+                    <button type="button" class="toggle-btn active" id="btnAccesCaisse" onclick="selectionnerProfil('caisse')">Accès caissier</button>
+                    <button type="button" class="toggle-btn" id="btnAccesGerant" onclick="selectionnerProfil('gerant')">Accès gérant</button>
+                </div>
+                <div class="toggle-note" id="toggleNote">Tables, commandes, chambres, paiements et stock.</div>
+
+                <form onsubmit="seConnecter(event)">
+                    <div class="input-group">
+                        <label class="input-label" for="loginUser">Identifiant</label>
+                        <input type="text" id="loginUser" class="input-field" value="caisse.binguiss" readonly>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" for="loginPass">Mot de passe</label>
+                        <div style="position:relative;display:block;">
+                            <input type="password" id="loginPass" class="input-field" autocomplete="current-password" required style="width:100%;box-sizing:border-box;padding-right:48px;">
+                            <button type="button" id="btnVoirMdp" onclick="basculerMotDePasse()" title="Afficher le mot de passe" aria-label="Afficher le mot de passe" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;margin:0;border:none;background:transparent;cursor:pointer;z-index:5;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                        </div>
+                    </div>
+                    <p id="loginErreur" role="alert" style="color:#b91c1c;font-size:0.9rem;margin:0 0 12px;min-height:1.2em;"></p>
+                    <button type="submit" class="btn-submit" id="btnConnexion">Se connecter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. INTERFACE CAISSE (caché tant que non connecté) -->
+    <div class="app-layout" id="dashboardScreen">
+
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-brand">
+                    <div class="brand-title">Le Binguiss</div>
+                    <span class="brand-badge">Espace caisse</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <div class="nav-item active" onclick="changerOnglet('tables')"><span>Tables</span></div>
+                    <div class="nav-item" onclick="changerOnglet('commandes')"><span>Commandes</span></div>
+                    <div class="nav-item" onclick="changerOnglet('chambres')"><span>Chambres</span></div>
+                    <div class="nav-item" onclick="changerOnglet('stock')"><span>Stock</span></div>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-role-label">Caissier</div>
+                <a class="logout-link" onclick="seDeconnecter()">Se déconnecter</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <h1 class="page-title">Restaurant</h1>
+                <p class="page-subtitle">Cliquez sur une table pour la nommer ou voir sa consommation · Rouge : non payée · Vert : payée</p>
+            </header>
+
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Caisse du jour</div>
+                    <div class="kpi-value" id="kpiCaisseJour">486 500 F</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Restaurant</div>
+                    <div class="kpi-value" id="kpiRestaurant">312 000 F</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Hôtel</div>
+                    <div class="kpi-value">174 500 F</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Commandes non payées</div>
+                    <div class="kpi-value" id="kpiNonPayees">4</div>
+                </div>
+            </section>
+
+            <section class="tables-grid" id="tablesContainer"></section>
+
+            <!-- ECRAN 3 : COMMANDES DU JOUR -->
+            <div class="commandes-screen" id="commandesScreen">
+                <header class="page-header" style="margin-bottom:16px">
+                    <h1 class="page-title">Commandes du jour</h1>
+                    <p class="page-subtitle" id="commandesSoustitre">Registre en direct · 8 commandes · 15 octobre</p>
+                </header>
+
+                <div class="commandes-filter-bar">
+                    <button type="button" class="filter-tab-btn active" id="fTab-toutes" onclick="filtrerCommandes('toutes')">Toutes</button>
+                    <button type="button" class="filter-tab-btn" id="fTab-surplace" onclick="filtrerCommandes('surplace')">Sur place</button>
+                    <button type="button" class="filter-tab-btn" id="fTab-emporter" onclick="filtrerCommandes('emporter')">À emporter</button>
+                    <button type="button" class="filter-tab-btn" id="fTab-livraison" onclick="filtrerCommandes('livraison')">Livraison</button>
+                    <button type="button" class="filter-tab-btn" id="fTab-adistance" onclick="filtrerCommandes('adistance')">À distance</button>
+                    <button type="button" class="btn-nouvelle-commande">+ Nouvelle commande</button>
+                </div>
+
+                <div class="commandes-table-wrapper">
+                    <table class="commandes-table">
+                        <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Table / Client</th>
+                                <th>Type</th>
+                                <th>Articles</th>
+                                <th>Total</th>
+                                <th>Statut</th>
+                                <th>Heure</th>
+                            </tr>
+                        </thead>
+                        <tbody id="commandesTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ECRAN 4 : CHAMBRES -->
+            <div class="chambres-screen" id="chambresScreen">
+                <header class="page-header" style="margin-bottom:20px;">
+                    <h1 class="page-title">Chambres</h1>
+                    <p class="page-subtitle">Semaine du 12 au 18 octobre</p>
+                </header>
+
+                <div class="chambres-top-bar">
+                    <div class="legend-pills-group">
+                        <span class="legend-pill pill-libre">Libre</span>
+                        <span class="legend-pill pill-reservee">Réservée</span>
+                        <span class="legend-pill pill-occupee">Occupée</span>
+                        <span class="legend-pill pill-payee">Payée</span>
+                    </div>
+                    <button type="button" class="btn-chambre-action" onclick="ouvrirNouvelleReservationChambre()">
+                        + Nouvelle réservation
+                    </button>
+                </div>
+
+                <div class="planning-card">
+                    <table class="planning-table">
+                        <thead>
+                            <tr>
+                                <th class="th-room"></th>
+                                <th>Lun</th>
+                                <th>Mar</th>
+                                <th>Mer</th>
+                                <th>Jeu</th>
+                                <th>Ven</th>
+                                <th>Sam</th>
+                                <th>Dim</th>
+                            </tr>
+                        </thead>
+                        <tbody id="planningChambresTbody"></tbody>
+                    </table>
+                </div>
+
+                <div class="booking-detail-card" id="bookingDetailCard">
+                    <div class="booking-client-info">
+                        <h3 class="booking-client-title" id="roomClientName">Koné Awa · Chambre 102</h3>
+                        <p class="booking-client-meta" id="roomClientMeta">Acompte 25 000 F · Solde restant 40 000 F · Mobile money</p>
+                    </div>
+                    <div class="booking-actions">
+                        <button type="button" class="btn-booking btn-checkin" onclick="actionCheckIn()">Check-in</button>
+                        <button type="button" class="btn-booking btn-checkout" onclick="actionCheckOut()">Check-out</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ECRAN 5 : STOCK -->
+            <div class="stock-screen" id="stockScreen">
+                <div class="stock-header-row">
+                    <header class="page-header" style="margin-bottom:0;">
+                        <h1 class="page-title">Stock</h1>
+                        <p class="page-subtitle">Quantités en stock · signalez un produit manquant</p>
+                    </header>
+                    <button type="button" class="btn-stock-manquant" onclick="signalerProduitManquantPrompt()">
+                        Signaler un manquant
+                    </button>
+                </div>
+
+                <div class="stock-threshold-bar">
+                    <div class="threshold-min-label">Seuil minimum : 1</div>
+                    <div class="threshold-legend-item">
+                        <span class="indicator-dot red"></span>
+                        <span>Rouge : stock de 1 ou moins (manquant)</span>
+                    </div>
+                    <div class="threshold-legend-item">
+                        <span class="indicator-dot green"></span>
+                        <span>Vert : stock supérieur à 1 (disponible)</span>
+                    </div>
+                </div>
+
+                <div class="stock-card">
+                    <table class="stock-table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Quantité en stock</th>
+                                <th>Seuil minimum</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- 3. MODAL : NOMMER LA TABLE -->
+    <div class="modal-overlay" id="modalNommerTable" onclick="fermerModalNommer(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 class="modal-title">Nommer la table</h3>
+            <p class="modal-desc">Donnez un nom à cette table, par exemple Parasol 1.</p>
+
+            <div class="modal-input-group">
+                <label class="modal-label" for="inputNomTable">Nom de la table</label>
+                <input type="text" id="inputNomTable" class="modal-input" placeholder="Ex: Parasol 1">
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" onclick="fermerModalNommer()">Annuler</button>
+                <button type="button" class="btn-modal-save" onclick="sauvegarderNomTable()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. TIROIR LATERAL : COMMANDE / CONSOMMATION -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="fermerTiroirCommande()"></div>
+
+    <aside class="order-drawer" id="orderDrawer">
+        <div>
+            <div class="drawer-header">
+                <h2 class="drawer-title" id="drawerTableTitle">Parasol 5</h2>
+                <button type="button" class="btn-close-drawer" onclick="fermerTiroirCommande()" aria-label="Fermer">✕</button>
+            </div>
+
+            <div class="drawer-subinfo">
+                <span id="drawerMetaInfo">Table libre · un client s'installe</span>
+                <button type="button" class="btn-drawer-rename" onclick="ouvrirModalDepuisTiroir()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Renommer</span>
+                </button>
+            </div>
+
+            <div id="drawerModeConsultation" style="display: none;">
+                <div class="order-items-list" id="drawerItemsList"></div>
+            </div>
+
+            <div id="drawerModeInstallation" style="display: none;">
+                <div class="catalog-categories">
+                    <button type="button" class="category-tab-btn active" id="tabCatPlats" onclick="changerCategorieMenu('plats')">Plats</button>
+                    <button type="button" class="category-tab-btn" id="tabCatBoissons" onclick="changerCategorieMenu('boissons')">Boissons</button>
+                    <button type="button" class="category-tab-btn" id="tabCatDesserts" onclick="changerCategorieMenu('desserts')">Desserts</button>
+                </div>
+
+                <div class="catalog-items-list" id="catalogItemsContainer"></div>
+
+                <div class="cart-section-title">Panier</div>
+                <div class="cart-items-box" id="cartItemsContainer"></div>
+            </div>
+        </div>
+
+        <div>
+            <div class="drawer-status-section" id="drawerStatusSection">
+                <div class="drawer-section-label">Statut de la commande</div>
+                <div class="status-pills-row">
+                    <button type="button" class="status-pill-btn pill-unpaid" id="btnStatutNonPayee" onclick="changerStatutCommande(false)">Non payée</button>
+                    <button type="button" class="status-pill-btn pill-paid inactive" id="btnStatutPayee" onclick="changerStatutCommande(true)">Payée</button>
+                </div>
+            </div>
+
+            <div class="drawer-total-box">
+                <div class="drawer-total-label">Total</div>
+                <div class="drawer-total-amount" id="drawerTotalAmount">8 000 F</div>
+            </div>
+
+            <div class="drawer-actions" id="drawerActionsConsultation" style="display: none;">
+                <button type="button" class="btn-print-bill" onclick="imprimerFacture()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    <span>Imprimer la facture</span>
+                </button>
+                <button type="button" class="btn-modify-order" onclick="basculerVersAjoutArticles()">Modifier la commande</button>
+            </div>
+
+            <div class="drawer-actions" id="drawerActionsInstallation" style="display: none;">
+                <button type="button" class="btn-save-order" onclick="enregistrerCommandeClient()">Enregistrer la commande</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Notification Toast -->
+    <div class="toast-notification" id="toastNotif">
+        <span id="toastText">Action effectuée</span>
+    </div>
+
+    <!-- PANNEAU LATERAL : DETAIL COMMANDE -->
+    <div class="cmd-drawer-overlay" id="cmdDrawerOverlay" onclick="fermerDetailCommande()"></div>
+
+    <aside class="cmd-detail-drawer" id="cmdDetailDrawer">
+        <div>
+            <div class="cmd-drawer-header">
+                <h2 class="cmd-drawer-title" id="cmdDrawerTitle">Commande Parasol 1</h2>
+                <button type="button" class="btn-cmd-close" onclick="fermerDetailCommande()">✕</button>
+            </div>
+            <div class="cmd-drawer-meta" id="cmdDrawerMeta">N° 128 · 12:40 · Sur place</div>
+
+            <div class="cmd-items-list" id="cmdItemsList"></div>
+
+            <div class="cmd-status-section">
+                <div class="cmd-status-label">Statut de la commande</div>
+                <div class="status-pills-row">
+                    <button type="button" class="status-pill-btn pill-unpaid" id="cmdBtnNonPayee" onclick="changerStatutCmd(false)">Non payée</button>
+                    <button type="button" class="status-pill-btn pill-paid inactive" id="cmdBtnPayee" onclick="changerStatutCmd(true)">Payée</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="drawer-total-box">
+                <div class="drawer-total-label">Total</div>
+                <div class="drawer-total-amount" id="cmdDrawerTotal">0 F</div>
+            </div>
+            <div class="drawer-actions">
+                <button type="button" class="btn-print-bill" onclick="ouvrirFactureDepuisCmd()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    <span>Imprimer la facture</span>
+                </button>
+                <button type="button" class="btn-modify-order">Modifier la commande</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MODAL FACTURE -->
+    <div class="invoice-modal-overlay" id="invoiceModal">
+        <div class="invoice-modal-box">
+            <div class="invoice-modal-toolbar">
+                <button type="button" class="btn-invoice-print" onclick="lancerImpression()">Imprimer</button>
+                <button type="button" class="btn-invoice-close" onclick="fermerFacture()">Fermer</button>
+            </div>
+            <div class="invoice-doc">
+                <div class="invoice-hotel-name">Hôtel Restaurant Le Binguiss</div>
+                <div class="invoice-hotel-address">Restaurant en bord de mer · Grand-Bassam</div>
+
+                <div class="invoice-facture-num" id="invoiceNum">FACTURE N° 128</div>
+                <div class="invoice-meta" id="invoiceMeta">
+                    Date : 15 octobre 2026 · 12:40<br>
+                    Parasol 1 · Sur place · Source : Restaurant
+                </div>
+
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Qté</th>
+                            <th>Prix unitaire</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceItemsTbody"></tbody>
+                </table>
+
+                <div class="invoice-total-row">
+                    <span class="invoice-total-label">Total à payer</span>
+                    <span class="invoice-total-amount" id="invoiceTotalAmount">20 000 F</span>
+                </div>
+
+                <div class="invoice-merci">Merci de votre visite</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. ESPACE GERANT (réservé au compte gérant) -->
+    <div class="gerant-layout" id="gerantScreen">
+
+        <aside class="gerant-sidebar">
+            <div>
+                <div class="sidebar-brand">
+                    <div class="brand-title">Le Binguiss</div>
+                    <span class="gerant-brand-badge">Espace gérant</span>
+                </div>
+                <nav class="sidebar-nav" style="margin-top:16px;">
+                    <div class="gerant-nav-item active" id="gNavDashboard" onclick="changerOngletGerant('dashboard')"><span>Tableau de bord</span></div>
+                    <div class="gerant-nav-item" id="gNavStock" onclick="changerOngletGerant('stock')"><span>Stock</span></div>
+                    <div class="gerant-nav-item" id="gNavRapports" onclick="changerOngletGerant('rapports')"><span>Rapports</span></div>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <div class="user-role-label">Gérant</div>
+                <a class="logout-link" onclick="seDeconcterGerant()">Se déconnecter</a>
+            </div>
+        </aside>
+
+        <main class="gerant-main">
+
+            <!-- TABLEAU DE BORD -->
+            <div class="gerant-screen active" id="gScreenDashboard">
+                <div class="periode-bar">
+                    <div>
+                        <h1 class="page-title">Tableau de bord</h1>
+                        <p class="page-subtitle">Entrées d'argent par activité</p>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                        <div class="periode-tabs" id="gDashTabs">
+                            <button class="periode-tab-btn" onclick="changerPeriodeDash('jour',this)">Jour</button>
+                            <button class="periode-tab-btn active" onclick="changerPeriodeDash('semaine',this)">Semaine</button>
+                            <button class="periode-tab-btn" onclick="changerPeriodeDash('mois',this)">Mois</button>
+                        </div>
+                        <div class="export-btns-row">
+                            <button class="btn-export-pdf" onclick="exporterPDF('dashboard')">Exporter en PDF</button>
+                            <button class="btn-export-excel" onclick="exporterExcel('dashboard')">Exporter en Excel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-gerant-grid">
+                    <div class="kpi-gerant-card">
+                        <div class="kpi-gerant-label">Total semaine</div>
+                        <div class="kpi-gerant-value" id="gKpiTotal">3 240 000 F</div>
+                        <div class="kpi-gerant-bar"><div class="kpi-gerant-bar-fill" style="width:100%"></div></div>
+                    </div>
+                    <div class="kpi-gerant-card">
+                        <div class="kpi-gerant-label">Restaurant</div>
+                        <div class="kpi-gerant-value" id="gKpiResto">1 980 000 F</div>
+                        <div class="kpi-gerant-bar"><div class="kpi-gerant-bar-fill resto" style="width:61%"></div></div>
+                    </div>
+                    <div class="kpi-gerant-card">
+                        <div class="kpi-gerant-label">Hôtel</div>
+                        <div class="kpi-gerant-value" id="gKpiHotel">1 260 000 F</div>
+                        <div class="kpi-gerant-bar"><div class="kpi-gerant-bar-fill hotel" style="width:39%"></div></div>
+                    </div>
+                </div>
+
+                <div class="paiements-card">
+                    <div class="paiements-title">Derniers paiements</div>
+                    <table class="paiements-table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Mode</th>
+                                <th style="text-align:right;">Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="source-pill resto">Restaurant</span></td>
+                                <td>Espèces</td>
+                                <td style="text-align:right;font-weight:700;">18 500 F</td>
+                            </tr>
+                            <tr>
+                                <td><span class="source-pill hotel">Hôtel</span></td>
+                                <td>Mobile money</td>
+                                <td style="text-align:right;font-weight:700;">65 000 F</td>
+                            </tr>
+                            <tr>
+                                <td><span class="source-pill resto">Restaurant</span></td>
+                                <td>Carte bancaire</td>
+                                <td style="text-align:right;font-weight:700;">27 000 F</td>
+                            </tr>
+                            <tr>
+                                <td><span class="source-pill hotel">Hôtel</span></td>
+                                <td>Espèces</td>
+                                <td style="text-align:right;font-weight:700;">40 000 F</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- GESTION DU STOCK (GERANT) -->
+            <div class="gerant-screen" id="gScreenStock">
+                <div class="gerant-stock-header">
+                    <div>
+                        <h1 class="page-title">Gestion du stock</h1>
+                        <p class="page-subtitle">Ajoutez des produits et modifiez les quantités</p>
+                    </div>
+                    <button class="btn-ajouter-produit" onclick="ouvrirModalAjouterProduit()">+ Ajouter un produit</button>
+                </div>
+
+                <div class="stock-threshold-bar" style="margin-bottom:20px;">
+                    <div class="threshold-min-label">Seuil minimum : 1</div>
+                    <div class="threshold-legend-item">
+                        <span class="indicator-dot red"></span>
+                        <span>Rouge : stock de 1 ou moins (manquant)</span>
+                    </div>
+                    <div class="threshold-legend-item">
+                        <span class="indicator-dot green"></span>
+                        <span>Vert : stock supérieur à 1 (disponible)</span>
+                    </div>
+                </div>
+
+                <div class="stock-card">
+                    <table class="stock-table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Quantité en stock</th>
+                                <th>Seuil minimum</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gStockTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- RAPPORTS -->
+            <div class="gerant-screen" id="gScreenRapports">
+                <div class="periode-bar">
+                    <div>
+                        <h1 class="page-title">Rapports</h1>
+                        <p class="page-subtitle">Rapports de ventes du restaurant et de l'hôtel</p>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                        <div class="periode-tabs" id="gRapportTabs">
+                            <button class="periode-tab-btn" onclick="changerPeriodeRapport('jour',this)">Jour</button>
+                            <button class="periode-tab-btn active" onclick="changerPeriodeRapport('semaine',this)">Semaine</button>
+                            <button class="periode-tab-btn" onclick="changerPeriodeRapport('mois',this)">Mois</button>
+                        </div>
+                        <div class="export-btns-row">
+                            <button class="btn-export-pdf" onclick="exporterPDF('rapports')">Exporter en PDF</button>
+                            <button class="btn-export-excel" onclick="exporterExcel('rapports')">Exporter en Excel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rapport-layout">
+                    <div class="rapport-ventes-card">
+                        <div class="rapport-ventes-title" id="rapportTableTitle">Rapport de ventes · semaine du 12 au 18 octobre</div>
+                        <table class="rapport-table" id="rapportTable">
+                            <thead>
+                                <tr>
+                                    <th>Jour</th>
+                                    <th>Restaurant</th>
+                                    <th>Hôtel</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rapportTbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="kpi-rapport-card">
+                        <div class="kpi-rapport-title">Pour calculer les KPI</div>
+                        <div class="kpi-rapport-item">
+                            <div class="kpi-rapport-item-label">Total des ventes</div>
+                            <div class="kpi-rapport-item-value" id="rapportKpiTotal">3 240 000 F</div>
+                        </div>
+                        <div class="kpi-rapport-item">
+                            <div class="kpi-rapport-item-label">Restaurant</div>
+                            <div class="kpi-rapport-item-value" id="rapportKpiResto">61 %</div>
+                        </div>
+                        <div class="kpi-rapport-item">
+                            <div class="kpi-rapport-item-label">Hôtel</div>
+                            <div class="kpi-rapport-item-value" id="rapportKpiHotel">39 %</div>
+                        </div>
+                        <div class="kpi-rapport-note">Les indicateurs roulois par le gérant sont à confirmer avec le client.</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL : AJOUTER UN PRODUIT AU STOCK -->
+    <div class="modal-produit-overlay" id="modalAjouterProduit" onclick="fermerModalAjouterProduit(event)">
+        <div class="modal-produit-box" onclick="event.stopPropagation()">
+            <h3 class="modal-produit-title">Ajouter un produit</h3>
+            <p class="modal-produit-desc">Saisissez le nom du produit à la main.</p>
+
+            <div class="input-group">
+                <label class="input-label modal-label" for="inputNomProduit">Nom du produit</label>
+                <input type="text" id="inputNomProduit" class="modal-input" placeholder="Ex : Jus de gingembre">
+            </div>
+
+            <div class="modal-produit-row">
+                <div class="input-group" style="margin-bottom:0;">
+                    <label class="input-label modal-label" for="inputQteProduit">Quantité en stock</label>
+                    <input type="number" id="inputQteProduit" class="modal-input" value="10" min="0">
+                </div>
+                <div class="input-group" style="margin-bottom:0;">
+                    <label class="input-label modal-label" for="inputSeuilProduit">Seuil minimum</label>
+                    <input type="number" id="inputSeuilProduit" class="modal-input" value="1" min="1">
+                </div>
+            </div>
+            <p class="modal-produit-note">Le produit passe en rouge quand le stock est égal ou inférieur au seuil.</p>
+
+            <div class="modal-produit-actions">
+                <button class="btn-produit-cancel" onclick="fermerModalAjouterProduit()">Annuler</button>
+                <button class="btn-produit-ajouter" onclick="confirmerAjoutProduit()">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/caisse.js" defer></script>
+</body>
+</html>
